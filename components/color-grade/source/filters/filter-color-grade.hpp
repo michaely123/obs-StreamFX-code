@@ -7,7 +7,7 @@
 #include "gfx/lut/gfx-lut-consumer.hpp"
 #include "gfx/lut/gfx-lut-producer.hpp"
 #include "gfx/lut/gfx-lut.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 #include "obs/gs/gs-texture.hpp"
 #include "obs/gs/gs-vertexbuffer.hpp"
 #include "obs/obs-source-factory.hpp"
@@ -52,7 +52,7 @@ namespace streamfx::filter::color_grade {
 		streamfx::gfx::lut::color_depth _lut_depth;
 
 		// Capture Cache
-		std::shared_ptr<streamfx::obs::gs::rendertarget> _ccache_rt;
+		std::shared_ptr<streamfx::obs::gs::texrender> _ccache_rt;
 		std::shared_ptr<streamfx::obs::gs::texture>      _ccache_texture;
 		bool                                             _ccache_fresh;
 
@@ -61,11 +61,11 @@ namespace streamfx::filter::color_grade {
 		bool                                             _lut_dirty;
 		std::shared_ptr<streamfx::gfx::lut::producer>    _lut_producer;
 		std::shared_ptr<streamfx::gfx::lut::consumer>    _lut_consumer;
-		std::shared_ptr<streamfx::obs::gs::rendertarget> _lut_rt;
+		std::shared_ptr<streamfx::obs::gs::texrender> _lut_rt;
 		std::shared_ptr<streamfx::obs::gs::texture>      _lut_texture;
 
 		// Render Cache
-		std::shared_ptr<streamfx::obs::gs::rendertarget> _cache_rt;
+		std::shared_ptr<streamfx::obs::gs::texrender> _cache_rt;
 		std::shared_ptr<streamfx::obs::gs::texture>      _cache_texture;
 		bool                                             _cache_fresh;
 

@@ -51,21 +51,21 @@ namespace streamfx::filter::dynamic_mask {
 
 		// Base texture for filtering
 		bool                                             _have_base;
-		std::shared_ptr<streamfx::obs::gs::rendertarget> _base_rt;
+		std::shared_ptr<streamfx::obs::gs::texrender> _base_rt;
 		std::shared_ptr<streamfx::obs::gs::texture>      _base_tex;
 		gs_color_space                                   _base_color_space;
 		gs_color_format                                  _base_color_format;
 		bool                                             _base_srgb;
 
 		bool                                             _have_input;
-		std::shared_ptr<streamfx::obs::gs::rendertarget> _input_rt;
+		std::shared_ptr<streamfx::obs::gs::texrender> _input_rt;
 		std::shared_ptr<streamfx::obs::gs::texture>      _input_tex;
 		gs_color_space                                   _input_color_space;
 		gs_color_format                                  _input_color_format;
 		bool                                             _input_srgb;
 
 		bool                                             _have_final;
-		std::shared_ptr<streamfx::obs::gs::rendertarget> _final_rt;
+		std::shared_ptr<streamfx::obs::gs::texrender> _final_rt;
 		std::shared_ptr<streamfx::obs::gs::texture>      _final_tex;
 		bool                                             _final_srgb;
 

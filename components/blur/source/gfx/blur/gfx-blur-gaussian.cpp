@@ -254,8 +254,8 @@ std::shared_ptr<::streamfx::gfx::blur::gaussian_data> streamfx::gfx::blur::gauss
 streamfx::gfx::blur::gaussian::gaussian() : _data(::streamfx::gfx::blur::gaussian_factory::get().data()), _size(1.), _step_scale({1., 1.})
 {
 	auto gctx      = streamfx::obs::gs::context();
-	_rendertarget  = std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA, GS_ZS_NONE);
-	_rendertarget2 = std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA, GS_ZS_NONE);
+	_rendertarget  = std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA, GS_ZS_NONE);
+	_rendertarget2 = std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA, GS_ZS_NONE);
 }
 
 streamfx::gfx::blur::gaussian::~gaussian() {}
@@ -321,8 +321,8 @@ std::shared_ptr<::streamfx::obs::gs::texture> streamfx::gfx::blur::gaussian::ren
 	}
 
 	auto    kernel = _data->get_kernel(size_t(_size));
-	float width  = float(_input_texture->get_width());
-	float height = float(_input_texture->get_height());
+	float width  = float(_input_texture->width());
+	float height = float(_input_texture->height());
 
 	// Setup
 	gs_set_cull_mode(GS_NEITHER);
@@ -426,8 +426,8 @@ std::shared_ptr<::streamfx::obs::gs::texture> streamfx::gfx::blur::gaussian_dire
 	}
 
 	auto    kernel = _data->get_kernel(size_t(_size));
-	float width  = float(_input_texture->get_width());
-	float height = float(_input_texture->get_height());
+	float width  = float(_input_texture->width());
+	float height = float(_input_texture->height());
 
 	// Setup
 	gs_set_cull_mode(GS_NEITHER);
@@ -482,8 +482,8 @@ std::shared_ptr<::streamfx::obs::gs::texture> streamfx::gfx::blur::gaussian_rota
 	}
 
 	auto    kernel = _data->get_kernel(size_t(_size));
-	float width  = float(_input_texture->get_width());
-	float height = float(_input_texture->get_height());
+	float width  = float(_input_texture->width());
+	float height = float(_input_texture->height());
 
 	// Setup
 	gs_set_cull_mode(GS_NEITHER);
@@ -563,8 +563,8 @@ std::shared_ptr<::streamfx::obs::gs::texture> streamfx::gfx::blur::gaussian_zoom
 		return _input_texture;
 	}
 
-	float width  = float(_input_texture->get_width());
-	float height = float(_input_texture->get_height());
+	float width  = float(_input_texture->width());
+	float height = float(_input_texture->height());
 
 	// Setup
 	gs_set_cull_mode(GS_NEITHER);

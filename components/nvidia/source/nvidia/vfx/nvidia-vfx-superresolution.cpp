@@ -208,7 +208,7 @@ std::shared_ptr<::streamfx::obs::gs::texture> streamfx::nvidia::vfx::superresolu
 #endif
 
 	// Resize if the size or scale was changed.
-	resize(in->get_width(), in->get_height());
+	resize(in->width(), in->height());
 
 	// Reload effect if dirty.
 	if (_dirty) {
@@ -219,7 +219,7 @@ std::shared_ptr<::streamfx::obs::gs::texture> streamfx::nvidia::vfx::superresolu
 #if defined(ENABLE_PROFILING) && !defined(D_PLATFORM_MAC) && _DEBUG
 		::streamfx::obs::gs::debug_marker profiler1{::streamfx::obs::gs::debug_color_copy, "Copy In -> Input"};
 #endif
-		gs_copy_texture(_input->get_texture()->get_object(), in->get_object());
+		gs_copy_texture(*(_input->get_texture()), *in);
 	}
 
 	{ // Convert Input to Source format

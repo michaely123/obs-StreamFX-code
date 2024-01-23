@@ -4,7 +4,7 @@
 
 #pragma once
 #include "gfx/gfx-util.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 #include "obs/gs/gs-texture.hpp"
 #include "obs/gs/gs-vertexbuffer.hpp"
 #include "obs/obs-source-factory.hpp"
@@ -72,8 +72,8 @@ namespace streamfx::filter::autoframing {
 
 		std::shared_ptr<::streamfx::gfx::util>              _gfx_debug;
 		std::shared_ptr<::streamfx::obs::gs::effect>        _standard_effect;
-		std::shared_ptr<::streamfx::obs::gs::rendertarget>  _input;
-		std::shared_ptr<::streamfx::obs::gs::vertex_buffer> _vb;
+		std::shared_ptr<::streamfx::obs::gs::texrender>  _input;
+		std::shared_ptr<::streamfx::obs::gs::vertexbuffer> _vb;
 
 		tracking_provider                       _provider;
 		tracking_provider                       _provider_ui;

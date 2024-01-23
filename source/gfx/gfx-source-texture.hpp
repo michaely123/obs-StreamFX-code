@@ -4,7 +4,7 @@
 
 #pragma once
 #include "common.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 #include "obs/gs/gs-texture.hpp"
 #include "obs/obs-source.hpp"
 #include "obs/obs-weak-source.hpp"
@@ -18,7 +18,7 @@ namespace streamfx::gfx {
 		streamfx::obs::source _parent;
 		streamfx::obs::source _child;
 
-		std::shared_ptr<streamfx::obs::gs::rendertarget> _rt;
+		std::shared_ptr<streamfx::obs::gs::texrender> _rt;
 
 		public:
 		~source_texture();

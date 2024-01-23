@@ -108,12 +108,12 @@ sdf_effects_instance::sdf_effects_instance(obs_data_t* settings, obs_source_t* s
 		auto gctx        = streamfx::obs::gs::context();
 		vec4 transparent = {0, 0, 0, 0};
 
-		_source_rt = std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA, GS_ZS_NONE);
-		_sdf_write = std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA32F, GS_ZS_NONE);
-		_sdf_read  = std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA32F, GS_ZS_NONE);
-		_output_rt = std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA, GS_ZS_NONE);
+		_source_rt = std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA, GS_ZS_NONE);
+		_sdf_write = std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA32F, GS_ZS_NONE);
+		_sdf_read  = std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA32F, GS_ZS_NONE);
+		_output_rt = std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA, GS_ZS_NONE);
 
-		std::shared_ptr<streamfx::obs::gs::rendertarget> initialize_rts[] = {_source_rt, _sdf_write, _sdf_read, _output_rt};
+		std::shared_ptr<streamfx::obs::gs::texrender> initialize_rts[] = {_source_rt, _sdf_write, _sdf_read, _output_rt};
 		for (auto rt : initialize_rts) {
 			auto op = rt->render(1, 1);
 			gs_clear(GS_CLEAR_COLOR | GS_CLEAR_DEPTH, &transparent, 0, 0);
@@ -432,7 +432,7 @@ void sdf_effects_instance::video_render(gs_effect_t* effect)
 			gs_blend_function(GS_BLEND_ONE, GS_BLEND_ZERO);
 			auto param = gs_effect_get_param_by_name(default_effect, "image");
 			if (param) {
-				gs_effect_set_texture(param, _output_texture->get_object());
+				gs_effect_set_texture(param, *_output_texture);
 			}
 			while (gs_effect_loop(default_effect, "Draw")) {
 				_gfx_util->draw_fullscreen_triangle();
@@ -443,7 +443,7 @@ void sdf_effects_instance::video_render(gs_effect_t* effect)
 			if (_outer_shadow) {
 				_sdf_consumer_effect.get_parameter("pSDFTexture").set_texture(_sdf_texture);
 				_sdf_consumer_effect.get_parameter("pSDFThreshold").set_float(_sdf_threshold);
-				_sdf_consumer_effect.get_parameter("pImageTexture").set_texture(_source_texture->get_object());
+				_sdf_consumer_effect.get_parameter("pImageTexture").set_texture(*_source_texture);
 				_sdf_consumer_effect.get_parameter("pShadowColor").set_float4(_outer_shadow_color);
 				_sdf_consumer_effect.get_parameter("pShadowMin").set_float(_outer_shadow_range_min);
 				_sdf_consumer_effect.get_parameter("pShadowMax").set_float(_outer_shadow_range_max);
@@ -455,7 +455,7 @@ void sdf_effects_instance::video_render(gs_effect_t* effect)
 			if (_inner_shadow) {
 				_sdf_consumer_effect.get_parameter("pSDFTexture").set_texture(_sdf_texture);
 				_sdf_consumer_effect.get_parameter("pSDFThreshold").set_float(_sdf_threshold);
-				_sdf_consumer_effect.get_parameter("pImageTexture").set_texture(_source_texture->get_object());
+				_sdf_consumer_effect.get_parameter("pImageTexture").set_texture(*_source_texture);
 				_sdf_consumer_effect.get_parameter("pShadowColor").set_float4(_inner_shadow_color);
 				_sdf_consumer_effect.get_parameter("pShadowMin").set_float(_inner_shadow_range_min);
 				_sdf_consumer_effect.get_parameter("pShadowMax").set_float(_inner_shadow_range_max);
@@ -467,7 +467,7 @@ void sdf_effects_instance::video_render(gs_effect_t* effect)
 			if (_outer_glow) {
 				_sdf_consumer_effect.get_parameter("pSDFTexture").set_texture(_sdf_texture);
 				_sdf_consumer_effect.get_parameter("pSDFThreshold").set_float(_sdf_threshold);
-				_sdf_consumer_effect.get_parameter("pImageTexture").set_texture(_source_texture->get_object());
+				_sdf_consumer_effect.get_parameter("pImageTexture").set_texture(*_source_texture);
 				_sdf_consumer_effect.get_parameter("pGlowColor").set_float4(_outer_glow_color);
 				_sdf_consumer_effect.get_parameter("pGlowWidth").set_float(_outer_glow_width);
 				_sdf_consumer_effect.get_parameter("pGlowSharpness").set_float(_outer_glow_sharpness);
@@ -479,7 +479,7 @@ void sdf_effects_instance::video_render(gs_effect_t* effect)
 			if (_inner_glow) {
 				_sdf_consumer_effect.get_parameter("pSDFTexture").set_texture(_sdf_texture);
 				_sdf_consumer_effect.get_parameter("pSDFThreshold").set_float(_sdf_threshold);
-				_sdf_consumer_effect.get_parameter("pImageTexture").set_texture(_source_texture->get_object());
+				_sdf_consumer_effect.get_parameter("pImageTexture").set_texture(*_source_texture);
 				_sdf_consumer_effect.get_parameter("pGlowColor").set_float4(_inner_glow_color);
 				_sdf_consumer_effect.get_parameter("pGlowWidth").set_float(_inner_glow_width);
 				_sdf_consumer_effect.get_parameter("pGlowSharpness").set_float(_inner_glow_sharpness);
@@ -491,7 +491,7 @@ void sdf_effects_instance::video_render(gs_effect_t* effect)
 			if (_outline) {
 				_sdf_consumer_effect.get_parameter("pSDFTexture").set_texture(_sdf_texture);
 				_sdf_consumer_effect.get_parameter("pSDFThreshold").set_float(_sdf_threshold);
-				_sdf_consumer_effect.get_parameter("pImageTexture").set_texture(_source_texture->get_object());
+				_sdf_consumer_effect.get_parameter("pImageTexture").set_texture(*_source_texture);
 				_sdf_consumer_effect.get_parameter("pOutlineColor").set_float4(_outline_color);
 				_sdf_consumer_effect.get_parameter("pOutlineWidth").set_float(_outline_width);
 				_sdf_consumer_effect.get_parameter("pOutlineOffset").set_float(_outline_offset);

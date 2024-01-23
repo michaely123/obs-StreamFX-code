@@ -175,8 +175,8 @@ std::shared_ptr<::streamfx::gfx::blur::box_linear_data> streamfx::gfx::blur::box
 
 streamfx::gfx::blur::box_linear::box_linear() : _data(::streamfx::gfx::blur::box_linear_factory::get().data()), _size(1.), _step_scale({1., 1.})
 {
-	_rendertarget  = std::make_shared<::streamfx::obs::gs::rendertarget>(GS_RGBA, GS_ZS_NONE);
-	_rendertarget2 = std::make_shared<::streamfx::obs::gs::rendertarget>(GS_RGBA, GS_ZS_NONE);
+	_rendertarget  = std::make_shared<::streamfx::obs::gs::texrender>(GS_RGBA, GS_ZS_NONE);
+	_rendertarget2 = std::make_shared<::streamfx::obs::gs::texrender>(GS_RGBA, GS_ZS_NONE);
 }
 
 streamfx::gfx::blur::box_linear::~box_linear() {}
@@ -236,8 +236,8 @@ std::shared_ptr<::streamfx::obs::gs::texture> streamfx::gfx::blur::box_linear::r
 	auto gdmp = streamfx::obs::gs::debug_marker(streamfx::obs::gs::debug_color_azure_radiance, "Box Linear Blur");
 #endif
 
-	float width  = float(_input_texture->get_width());
-	float height = float(_input_texture->get_height());
+	float width  = float(_input_texture->width());
+	float height = float(_input_texture->height());
 
 	gs_set_cull_mode(GS_NEITHER);
 	gs_enable_color(true, true, true, true);
@@ -326,8 +326,8 @@ std::shared_ptr<::streamfx::obs::gs::texture> streamfx::gfx::blur::box_linear_di
 	auto gdmp = streamfx::obs::gs::debug_marker(streamfx::obs::gs::debug_color_azure_radiance, "Box Linear Directional Blur");
 #endif
 
-	float width  = float(_input_texture->get_width());
-	float height = float(_input_texture->get_height());
+	float width  = float(_input_texture->width());
+	float height = float(_input_texture->height());
 
 	gs_blend_state_push();
 	gs_reset_blend_state();

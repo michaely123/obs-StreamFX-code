@@ -89,3 +89,17 @@ cv::result streamfx::nvidia::vfx::effect::get_string(parameter_t param, std::str
 	}
 	return res;
 }
+
+streamfx::nvidia::cv::result vfx::effect::get_string(parameter_t param, std::u8string& value)
+{
+	const char8_t* cvalue = nullptr;
+	cv::result  res    = get_string(param, cvalue);
+	if (res == cv::result::SUCCESS) {
+		if (cvalue) {
+			value = cvalue;
+		} else {
+			value.clear();
+		}
+	}
+	return res;
+}

@@ -44,15 +44,7 @@ streamfx::nvidia::cuda::gstexture::gstexture(std::shared_ptr<streamfx::obs::gs::
 	}
 #ifdef WIN32
 	if (dev_type == GS_DEVICE_DIRECT3D_11) {
-		ID3D11Resource* resource = nullptr;
-		switch (_texture->get_type()) {
-		case streamfx::obs::gs::texture::type::Cube:
-		case streamfx::obs::gs::texture::type::Volume:
-		case streamfx::obs::gs::texture::type::Normal: {
-			resource = static_cast<ID3D11Resource*>(gs_texture_get_obj(_texture->get_object()));
-			break;
-		}
-		}
+		ID3D11Resource* resource = static_cast<ID3D11Resource*>(gs_texture_get_obj(_texture->get_object()));
 
 		if (!resource) {
 			throw std::runtime_error("nvidia::cuda::gstexture: Failed to get resource from gs::texture.");

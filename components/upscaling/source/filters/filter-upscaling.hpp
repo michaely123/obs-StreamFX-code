@@ -4,7 +4,7 @@
 
 #pragma once
 #include "obs/gs/gs-effect.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 #include "obs/gs/gs-texture.hpp"
 #include "obs/obs-source-factory.hpp"
 #include "plugin.hpp"
@@ -41,13 +41,11 @@ namespace streamfx::filter::upscaling {
 		std::mutex                              _provider_lock;
 		std::shared_ptr<util::threadpool::task> _provider_task;
 
-		std::shared_ptr<::streamfx::obs::gs::effect>  _standard_effect;
-		std::shared_ptr<::streamfx::obs::gs::sampler> _channel0_sampler;
-		std::shared_ptr<::streamfx::obs::gs::sampler> _channel1_sampler;
+		std::shared_ptr<::streamfx::obs::gs::effect> _standard_effect;
 
-		std::shared_ptr<::streamfx::obs::gs::rendertarget> _input;
-		std::shared_ptr<::streamfx::obs::gs::texture>      _output;
-		bool                                               _dirty;
+		std::shared_ptr<::streamfx::obs::gs::texrender> _input;
+		std::shared_ptr<::streamfx::obs::gs::texture>   _output;
+		bool                                            _dirty;
 
 #ifdef ENABLE_NVIDIA
 		std::shared_ptr<::streamfx::nvidia::vfx::superresolution> _nvidia_fx;

@@ -650,7 +650,7 @@ void streamfx::obs::gs::effect_parameter::set_sampler(std::shared_ptr<streamfx::
 {
 	if (get_type() != type::Texture)
 		throw std::bad_cast();
-	gs_effect_set_next_sampler(get(), v->get_object());
+	gs_effect_set_next_sampler(get(), v->update());
 }
 
 void streamfx::obs::gs::effect_parameter::set_sampler(gs_sampler_state* v)

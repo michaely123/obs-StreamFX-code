@@ -187,14 +187,14 @@ autoframing_instance::autoframing_instance(obs_data_t* data, obs_source_t* self)
 		_gfx_debug = ::streamfx::gfx::util::get();
 
 		// Create the render target for the input buffering.
-		_input = std::make_shared<::streamfx::obs::gs::rendertarget>(GS_RGBA_UNORM, GS_ZS_NONE);
+		_input = std::make_shared<::streamfx::obs::gs::texrender>(GS_RGBA_UNORM, GS_ZS_NONE);
 		_input->render(1, 1); // Preallocate the RT on the driver and GPU.
 
 		// Load the required effect.
 		_standard_effect = std::make_shared<::streamfx::obs::gs::effect>(::streamfx::data_file_path("effects/standard.effect"));
 
 		// Create the Vertex Buffer for rendering.
-		_vb = std::make_shared<::streamfx::obs::gs::vertex_buffer>(uint32_t{4}, uint8_t{1});
+		_vb = std::make_shared<::streamfx::obs::gs::vertexbuffer>(uint32_t{4}, uint8_t{1});
 		vec3_set(_vb->at(0).position, 0, 0, 0);
 		vec3_set(_vb->at(1).position, 1, 0, 0);
 		vec3_set(_vb->at(2).position, 0, 1, 0);
@@ -581,7 +581,7 @@ void autoframing_instance::video_render(gs_effect_t* effect)
 					gs_draw(GS_TRISTRIP, 0, 4);
 				}
 			} else {
-				gs_effect_set_texture(gs_effect_get_param_by_name(effect, "image"), _input->get_texture()->get_object());
+				gs_effect_set_texture(gs_effect_get_param_by_name(effect, "image"), *_input);
 
 				while (gs_effect_loop(effect, "Draw")) {
 					gs_draw(GS_TRISTRIP, 0, 4);

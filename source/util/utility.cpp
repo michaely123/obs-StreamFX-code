@@ -64,16 +64,17 @@ std::pair<int64_t, int64_t> streamfx::util::size_from_string(std::string_view te
 
 void* streamfx::util::memory::malloc_aligned(std::size_t align, std::size_t size)
 {
+	void* ptr = nullptr;
 #ifdef USE_MSC_ALLOC
-	return _aligned_malloc(size, align);
+	ptr = _aligned_malloc(size, align);
 #elif defined(USE_STD_ALLOC)
-	return aligned_alloc(size, align);
+	ptr = aligned_alloc(size, align);
 #else
 	// Ensure that we have space for the pointer and the data.
 	std::size_t asize = aligned_offset(align, size + (sizeof(void*) * 2));
 
 	// Allocate memory and store integer representation of pointer.
-	void* ptr = malloc(asize);
+	ptr = malloc(asize);
 
 	// Calculate actual aligned position
 	intptr_t ptr_off = static_cast<intptr_t>(aligned_offset(align, reinterpret_cast<size_t>(ptr) + sizeof(void*)));
@@ -82,8 +83,19 @@ void* streamfx::util::memory::malloc_aligned(std::size_t align, std::size_t size
 	*reinterpret_cast<intptr_t*>(ptr_off - sizeof(void*)) = reinterpret_cast<intptr_t>(ptr);
 
 	// Return aligned pointer
-	return reinterpret_cast<void*>(ptr_off);
+	ptr = reinterpret_cast<void*>(ptr_off);
 #endif
+	if (!ptr) {
+		throw std::bad_alloc();
+	} else {
+		#ifndef D_PLATFORM_WINDOWS
+		// For user-space allocations, Windows automatically zeroes out memory no questions asked. We can ask
+		// for this not to happen, but usually we want to do it anyway. So on other platforms, this ensures
+		// the memory region zeroed by default.
+		memset(ptr, 0, size);
+		#endif
+	}
+	return ptr;
 }
 
 void streamfx::util::memory::free_aligned(void* mem)

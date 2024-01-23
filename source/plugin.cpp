@@ -134,9 +134,9 @@ std::shared_ptr<streamfx::util::threadpool::threadpool> streamfx::threadpool()
 
 std::filesystem::path streamfx::data_file_path(std::string_view file)
 {
-	const char* root_path = obs_get_module_data_path(obs_current_module());
+	const char8_t* root_path = reinterpret_cast<const char8_t*>(obs_get_module_data_path(obs_current_module()));
 	if (root_path) {
-		auto ret = std::filesystem::u8path(root_path);
+		auto ret = std::filesystem::path(root_path);
 		ret.append(file.data());
 		return ret;
 	} else {
@@ -146,9 +146,9 @@ std::filesystem::path streamfx::data_file_path(std::string_view file)
 
 std::filesystem::path streamfx::config_file_path(std::string_view file)
 {
-	char* root_path = obs_module_get_config_path(obs_current_module(), file.data());
+	char8_t* root_path = reinterpret_cast<char8_t*>(obs_module_get_config_path(obs_current_module(), file.data()));
 	if (root_path) {
-		auto ret = std::filesystem::u8path(root_path);
+		auto ret = std::filesystem::path(root_path);
 		bfree(root_path);
 		return ret;
 	} else {

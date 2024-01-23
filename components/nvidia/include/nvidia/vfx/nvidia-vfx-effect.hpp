@@ -27,7 +27,7 @@ namespace streamfx::nvidia::vfx {
 		std::shared_ptr<cv::cv>    _nvcvi;
 		std::shared_ptr<vfx>       _nvvfx;
 		std::shared_ptr<void>      _fx;
-		std::string                _model_path;
+		std::u8string                _model_path;
 
 		public:
 		~effect();
@@ -97,6 +97,15 @@ namespace streamfx::nvidia::vfx {
 			return _nvvfx->NvVFX_GetString(_fx.get(), param, &value);
 		}
 
+		inline cv::result set_string(parameter_t param, const char8_t* const value)
+		{
+			return _nvvfx->NvVFX_SetString(_fx.get(), param, reinterpret_cast<const char*>(value));
+		}
+		inline cv::result get_string(parameter_t param, const char8_t*& value)
+		{
+			return _nvvfx->NvVFX_GetString(_fx.get(), param, reinterpret_cast<const char**>(&value));
+		}
+
 		inline cv::result set_string(parameter_t param, std::string_view const& value)
 		{
 			return _nvvfx->NvVFX_SetString(_fx.get(), param, value.data());
@@ -108,6 +117,12 @@ namespace streamfx::nvidia::vfx {
 			return _nvvfx->NvVFX_SetString(_fx.get(), param, value.c_str());
 		}
 		cv::result get_string(parameter_t param, std::string& value);
+
+		inline cv::result set_string(parameter_t param, std::u8string const& value)
+		{
+			return _nvvfx->NvVFX_SetString(_fx.get(), param, reinterpret_cast<const char*>(value.c_str()));
+		}
+		cv::result get_string(parameter_t param, std::u8string& value);
 
 		public /* CUDA Stream */:
 		inline cv::result set_cuda_stream(parameter_t param, cuda::stream_t const& value)

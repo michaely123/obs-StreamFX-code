@@ -4,7 +4,7 @@
 
 #pragma once
 #include "obs/gs/gs-effect.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 #include "obs/gs/gs-texture.hpp"
 #include "obs/obs-source-factory.hpp"
 #include "plugin.hpp"
@@ -41,10 +41,8 @@ namespace streamfx::filter::virtual_greenscreen {
 		std::shared_ptr<util::threadpool::task>   _provider_task;
 
 		std::shared_ptr<::streamfx::obs::gs::effect>  _effect;
-		std::shared_ptr<::streamfx::obs::gs::sampler> _channel0_sampler;
-		std::shared_ptr<::streamfx::obs::gs::sampler> _channel1_sampler;
 
-		std::shared_ptr<::streamfx::obs::gs::rendertarget> _input;
+		std::shared_ptr<::streamfx::obs::gs::texrender> _input;
 		std::shared_ptr<::streamfx::obs::gs::texture>      _output_color;
 		std::shared_ptr<::streamfx::obs::gs::texture>      _output_alpha;
 		bool                                               _dirty;

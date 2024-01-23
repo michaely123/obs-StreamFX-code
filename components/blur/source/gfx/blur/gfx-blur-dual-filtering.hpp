@@ -7,7 +7,7 @@
 #include "gfx-blur-base.hpp"
 #include "gfx/gfx-util.hpp"
 #include "obs/gs/gs-effect.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 #include "obs/gs/gs-texture.hpp"
 
 #include "warning-disable.hpp"
@@ -82,7 +82,7 @@ namespace streamfx::gfx {
 
 			std::shared_ptr<streamfx::obs::gs::texture> _input_texture;
 
-			std::vector<std::shared_ptr<streamfx::obs::gs::rendertarget>> _rts;
+			std::vector<std::shared_ptr<streamfx::obs::gs::texrender>> _rts;
 
 			public:
 			dual_filtering();

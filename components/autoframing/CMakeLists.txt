@@ -21,4 +21,3 @@ function(streamfx_auto_framing_resolver)
 		)
 	endif()
 endfunction()
-

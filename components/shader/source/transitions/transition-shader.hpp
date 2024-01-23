@@ -5,7 +5,7 @@
 #pragma once
 #include "common.hpp"
 #include "gfx/shader/gfx-shader.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 #include "obs/obs-source-factory.hpp"
 #include "plugin.hpp"
 

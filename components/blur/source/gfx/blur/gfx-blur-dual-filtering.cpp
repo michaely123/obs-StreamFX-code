@@ -179,7 +179,7 @@ streamfx::gfx::blur::dual_filtering::dual_filtering() : _data(::streamfx::gfx::b
 #elif 0
 		cf = GS_RGBA32F;
 #endif
-		_rts[n] = std::make_shared<streamfx::obs::gs::rendertarget>(cf, GS_ZS_NONE);
+		_rts[n] = std::make_shared<streamfx::obs::gs::texrender>(cf, GS_ZS_NONE);
 	}
 }
 
@@ -236,8 +236,8 @@ std::shared_ptr<::streamfx::obs::gs::texture> streamfx::gfx::blur::dual_filterin
 	gs_stencil_function(GS_STENCIL_BOTH, GS_ALWAYS);
 	gs_stencil_op(GS_STENCIL_BOTH, GS_ZERO, GS_ZERO, GS_ZERO);
 
-	uint32_t width      = _input_texture->get_width();
-	uint32_t height     = _input_texture->get_height();
+	uint32_t width      = _input_texture->width();
+	uint32_t height     = _input_texture->height();
 	size_t   iterations = _iterations;
 
 	// Downsample
@@ -286,8 +286,8 @@ std::shared_ptr<::streamfx::obs::gs::texture> streamfx::gfx::blur::dual_filterin
 		std::shared_ptr<streamfx::obs::gs::texture> tex = _rts[n]->get_texture();
 
 		// Get Size
-		uint32_t iwidth  = tex->get_width();
-		uint32_t iheight = tex->get_height();
+		uint32_t iwidth  = tex->width();
+		uint32_t iheight = tex->height();
 		uint32_t owidth  = width >> (n - 1);
 		uint32_t oheight = height >> (n - 1);
 

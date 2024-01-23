@@ -103,7 +103,7 @@ void ar::facedetection::process(std::shared_ptr<::streamfx::obs::gs::texture> in
 #endif
 
 	// Resize if the size or scale was changed.
-	resize(in->get_width(), in->get_height());
+	resize(in->width(), in->height());
 
 	// Reload effect if dirty.
 	if (_dirty) {
@@ -114,7 +114,7 @@ void ar::facedetection::process(std::shared_ptr<::streamfx::obs::gs::texture> in
 #if defined(ENABLE_PROFILING) && !defined(D_PLATFORM_MAC) && _DEBUG
 		::streamfx::obs::gs::debug_marker profiler1{::streamfx::obs::gs::debug_color_copy, "Copy In -> Input"};
 #endif
-		gs_copy_texture(_input->get_texture()->get_object(), in->get_object());
+		gs_copy_texture(*(_input->get_texture()), *in);
 	}
 
 	{ // Convert Input to Source format
@@ -168,7 +168,7 @@ void ar::facedetection::resize(uint32_t width, uint32_t height)
 		_tmp = std::make_shared<::streamfx::nvidia::cv::image>(width, height, ::streamfx::nvidia::cv::pixel_format::RGBA, ::streamfx::nvidia::cv::component_type::UINT8, ::streamfx::nvidia::cv::component_layout::PLANAR, ::streamfx::nvidia::cv::memory_location::GPU, 1);
 	}
 
-	if (!_input || (width != _input->get_texture()->get_width()) || (height != _input->get_texture()->get_height())) {
+	if (!_input || (width != _input->get_texture()->width()) || (height != _input->get_texture()->height())) {
 		if (_input) {
 			_input->resize(width, height);
 		} else {

@@ -39,8 +39,8 @@ std::shared_ptr<streamfx::obs::gs::texture> streamfx::gfx::lut::producer::produc
 {
 	auto gctx = streamfx::obs::gs::context();
 
-	if (!_rt || (_rt->get_color_format() != format_from_depth((depth)))) {
-		_rt = std::make_shared<streamfx::obs::gs::rendertarget>(format_from_depth(depth), GS_ZS_NONE);
+	if (!_rt || (_rt->color_format() != format_from_depth((depth)))) {
+		_rt = std::make_shared<streamfx::obs::gs::texrender>(format_from_depth(depth), GS_ZS_NONE);
 	}
 
 	auto effect = _data->producer_effect();

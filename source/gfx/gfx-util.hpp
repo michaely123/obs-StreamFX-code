@@ -13,11 +13,11 @@
 namespace streamfx::gfx {
 	class util {
 		std::shared_ptr<::streamfx::obs::gs::effect>        _effect;
-		std::shared_ptr<::streamfx::obs::gs::vertex_buffer> _point_vb;
-		std::shared_ptr<::streamfx::obs::gs::vertex_buffer> _line_vb;
-		std::shared_ptr<::streamfx::obs::gs::vertex_buffer> _arrow_vb;
-		std::shared_ptr<::streamfx::obs::gs::vertex_buffer> _quad_vb;
-		std::shared_ptr<::streamfx::obs::gs::vertex_buffer> _fstri_vb;
+		std::shared_ptr<::streamfx::obs::gs::vertexbuffer> _point_vb;
+		std::shared_ptr<::streamfx::obs::gs::vertexbuffer> _line_vb;
+		std::shared_ptr<::streamfx::obs::gs::vertexbuffer> _arrow_vb;
+		std::shared_ptr<::streamfx::obs::gs::vertexbuffer> _quad_vb;
+		std::shared_ptr<::streamfx::obs::gs::vertexbuffer> _fstri_vb;
 
 		public /* Singleton */:
 		static std::shared_ptr<streamfx::gfx::util> get();

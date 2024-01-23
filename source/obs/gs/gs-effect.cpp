@@ -99,7 +99,7 @@ streamfx::obs::gs::effect::effect(std::string_view code, std::string_view name)
 	reset(effect, [](gs_effect_t* ptr) { gs_effect_destroy(ptr); });
 }
 
-streamfx::obs::gs::effect::effect(std::filesystem::path file) : effect(load_file_as_code(file), streamfx::util::platform::utf8_to_native(std::filesystem::absolute(file)).generic_u8string()) {}
+streamfx::obs::gs::effect::effect(std::filesystem::path file) : effect(load_file_as_code(file), std::filesystem::absolute(file).generic_string()) {}
 
 streamfx::obs::gs::effect::~effect()
 {

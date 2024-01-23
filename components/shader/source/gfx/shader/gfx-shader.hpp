@@ -9,7 +9,7 @@
 #include "gfx/gfx-util.hpp"
 #include "gfx/shader/gfx-shader-param.hpp"
 #include "obs/gs/gs-effect.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 
 #include "warning-disable.hpp"
 #include <filesystem>
@@ -71,7 +71,7 @@ namespace streamfx::gfx {
 
 			// Rendering
 			bool                                             _rt_up_to_date;
-			std::shared_ptr<streamfx::obs::gs::rendertarget> _rt;
+			std::shared_ptr<streamfx::obs::gs::texrender> _rt;
 
 			public:
 			shader(obs_source_t* self, shader_mode mode);

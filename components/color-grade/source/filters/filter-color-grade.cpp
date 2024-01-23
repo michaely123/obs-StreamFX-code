@@ -153,7 +153,7 @@ color_grade_instance::color_grade_instance(obs_data_t* data, obs_source_t* self)
 
 void color_grade_instance::allocate_rendertarget(gs_color_format format)
 {
-	_cache_rt = std::make_unique<streamfx::obs::gs::rendertarget>(format, GS_ZS_NONE);
+	_cache_rt = std::make_unique<streamfx::obs::gs::texrender>(format, GS_ZS_NONE);
 }
 
 float fix_gamma_value(double_t v)
@@ -287,9 +287,9 @@ void color_grade_instance::rebuild_lut()
 	// Modify the LUT with our color grade.
 	if (lut_texture) {
 		// Check if we have a render target to work with and if it's the correct format.
-		if (!_lut_rt || (lut_texture->get_color_format() != _lut_rt->get_color_format())) {
+		if (!_lut_rt || (lut_texture->color_format() != _lut_rt->color_format())) {
 			// Create a new render target with new format.
-			_lut_rt = std::make_unique<streamfx::obs::gs::rendertarget>(lut_texture->get_color_format(), GS_ZS_NONE);
+			_lut_rt = std::make_unique<streamfx::obs::gs::texrender>(lut_texture->color_format(), GS_ZS_NONE);
 		}
 
 		// Prepare our color grade effect.
@@ -301,7 +301,7 @@ void color_grade_instance::rebuild_lut()
 		}
 
 		{ // Begin rendering.
-			auto op = _lut_rt->render(lut_texture->get_width(), lut_texture->get_height());
+			auto op = _lut_rt->render(lut_texture->width(), lut_texture->height());
 
 			// Set up graphics context.
 			gs_ortho(0, 1, 0, 1, 0, 1);
@@ -365,7 +365,7 @@ void color_grade_instance::video_render(gs_effect_t* shader)
 #endif
 		// If the input cache render target doesn't exist, create it.
 		if (!_ccache_rt) {
-			_ccache_rt = std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA, GS_ZS_NONE);
+			_ccache_rt = std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA, GS_ZS_NONE);
 		}
 
 		{
@@ -427,7 +427,7 @@ void color_grade_instance::video_render(gs_effect_t* shader)
 			}
 
 			// Reallocate the rendertarget if necessary.
-			if (_cache_rt->get_color_format() != GS_RGBA) {
+			if (_cache_rt->color_format() != GS_RGBA) {
 				allocate_rendertarget(GS_RGBA);
 			}
 
@@ -485,7 +485,7 @@ void color_grade_instance::video_render(gs_effect_t* shader)
 		streamfx::obs::gs::debug_marker gdm{streamfx::obs::gs::debug_color_convert, "Direct Rendering"};
 #endif
 		// Reallocate the rendertarget if necessary.
-		if (_cache_rt->get_color_format() != GS_RGBA) {
+		if (_cache_rt->color_format() != GS_RGBA) {
 			allocate_rendertarget(GS_RGBA);
 		}
 
@@ -547,7 +547,7 @@ void color_grade_instance::video_render(gs_effect_t* shader)
 
 		// Draw the render cache.
 		while (gs_effect_loop(shader, "Draw")) {
-			gs_effect_set_texture(gs_effect_get_param_by_name(shader, "image"), _cache_texture ? _cache_texture->get_object() : nullptr);
+			gs_effect_set_texture(gs_effect_get_param_by_name(shader, "image"), _cache_texture ? *_cache_texture : nullptr);
 			gs_draw_sprite(nullptr, 0, width, height);
 		}
 	}

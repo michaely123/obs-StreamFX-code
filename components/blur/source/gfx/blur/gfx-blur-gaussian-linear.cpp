@@ -225,8 +225,8 @@ streamfx::gfx::blur::gaussian_linear::gaussian_linear() : _data(::streamfx::gfx:
 {
 	auto gctx = streamfx::obs::gs::context();
 
-	_rendertarget  = std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA, GS_ZS_NONE);
-	_rendertarget2 = std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA, GS_ZS_NONE);
+	_rendertarget  = std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA, GS_ZS_NONE);
+	_rendertarget2 = std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA, GS_ZS_NONE);
 }
 
 streamfx::gfx::blur::gaussian_linear::~gaussian_linear() {}
@@ -292,8 +292,8 @@ std::shared_ptr<::streamfx::obs::gs::texture> streamfx::gfx::blur::gaussian_line
 		return _input_texture;
 	}
 
-	float width  = float(_input_texture->get_width());
-	float height = float(_input_texture->get_height());
+	float width  = float(_input_texture->width());
+	float height = float(_input_texture->height());
 
 	// Setup
 	gs_set_cull_mode(GS_NEITHER);
@@ -397,8 +397,8 @@ std::shared_ptr<::streamfx::obs::gs::texture> streamfx::gfx::blur::gaussian_line
 		return _input_texture;
 	}
 
-	float width  = float(_input_texture->get_width());
-	float height = float(_input_texture->get_height());
+	float width  = float(_input_texture->width());
+	float height = float(_input_texture->height());
 
 	// Setup
 	gs_set_cull_mode(GS_NEITHER);

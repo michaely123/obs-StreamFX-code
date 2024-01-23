@@ -7,7 +7,7 @@
 #pragma once
 #include "common.hpp"
 #include "gfx-shader-param.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 #include "obs/gs/gs-texture.hpp"
 #include "obs/obs-source-active-child.hpp"
 #include "obs/obs-source-active-reference.hpp"
@@ -71,7 +71,7 @@ namespace streamfx::gfx {
 			std::shared_ptr<streamfx::obs::source_active_child>      _source_child;
 			std::shared_ptr<streamfx::obs::source_active_reference>  _source_active;
 			std::shared_ptr<streamfx::obs::source_showing_reference> _source_visible;
-			std::shared_ptr<streamfx::obs::gs::rendertarget>         _source_rendertarget;
+			std::shared_ptr<streamfx::obs::gs::texrender>         _source_rendertarget;
 
 			public:
 			texture_parameter(streamfx::gfx::shader::shader* parent, streamfx::obs::gs::effect_parameter param, std::string prefix);

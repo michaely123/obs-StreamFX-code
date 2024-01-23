@@ -6,7 +6,7 @@
 #include "common.hpp"
 #include "gfx/gfx-mipmapper.hpp"
 #include "gfx/gfx-util.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 #include "obs/gs/gs-texture.hpp"
 #include "obs/gs/gs-vertexbuffer.hpp"
 #include "obs/obs-source-factory.hpp"
@@ -25,6 +25,22 @@ namespace streamfx::filter::transform {
 	class transform_instance : public obs::source_instance {
 		std::shared_ptr<streamfx::gfx::util> _gfx_util;
 
+		// Lifetime Data
+		streamfx::obs::gs::effect                        _standard_effect;
+		streamfx::obs::gs::effect                        _transform_effect;
+		std::pair<uint32_t, uint32_t>                    _source_size;
+		size_t                                           _mip_levels;
+		std::shared_ptr<streamfx::obs::gs::vertexbuffer> _mesh;
+		std::shared_ptr<streamfx::obs::gs::sampler>      _sampler;
+		streamfx::gfx::mipmapper                         _mipmapper;
+		std::shared_ptr<streamfx::obs::gs::texrender>    _final_rt;
+		std::shared_ptr<streamfx::obs::gs::texture>      _final_tex;
+
+		// Frame Data
+		bool                      _mesh_dirty;
+		bool                      _is_rendered;
+		std::pair<size_t, size_t> _cache_size;
+
 		// Settings
 		transform_mode _camera_mode;
 		float          _camera_fov;
@@ -41,32 +57,7 @@ namespace streamfx::filter::transform {
 			vec2 bl;
 			vec2 br;
 		} _corners;
-
-		// Data
-		streamfx::obs::gs::effect  _standard_effect;
-		streamfx::obs::gs::effect  _transform_effect;
-		streamfx::obs::gs::sampler _sampler;
-
-		// Cache
-		bool                                             _cache_rendered;
-		std::shared_ptr<streamfx::obs::gs::rendertarget> _cache_rt;
-		std::shared_ptr<streamfx::obs::gs::texture>      _cache_texture;
-
-		// Mip-mapping
-		bool                                        _mipmap_enabled;
-		bool                                        _mipmap_rendered;
-		streamfx::gfx::mipmapper                    _mipmapper;
-		std::shared_ptr<streamfx::obs::gs::texture> _mipmap_texture;
-
-		// Input
-		bool                                             _source_rendered;
-		std::pair<uint32_t, uint32_t>                    _source_size;
-		std::shared_ptr<streamfx::obs::gs::rendertarget> _source_rt;
-		std::shared_ptr<streamfx::obs::gs::texture>      _source_texture;
-
-		// Mesh
-		bool                                              _update_mesh;
-		std::shared_ptr<streamfx::obs::gs::vertex_buffer> _vertex_buffer;
+		bool _mipmap_enabled;
 
 		public:
 		transform_instance(obs_data_t*, obs_source_t*);

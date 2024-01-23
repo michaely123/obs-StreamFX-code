@@ -136,10 +136,10 @@ void streamfx::gfx::shader::texture_parameter::defaults(obs_data_t* settings)
 {
 	if (field_type() == texture_field_type::Input) {
 		obs_data_set_default_int(settings, _keys[0].c_str(), static_cast<long long>(texture_type::File));
-		obs_data_set_default_string(settings, _keys[1].c_str(), _default.generic_u8string().c_str());
+		obs_data_set_default_string(settings, _keys[1].c_str(), reinterpret_cast<const char*>(_default.generic_u8string().c_str()));
 		obs_data_set_default_string(settings, _keys[2].c_str(), "");
 	} else {
-		obs_data_set_default_string(settings, _keys[1].c_str(), _default.generic_u8string().c_str());
+		obs_data_set_default_string(settings, _keys[1].c_str(), reinterpret_cast<const char*>(_default.generic_u8string().c_str()));
 	}
 }
 
@@ -163,7 +163,7 @@ void streamfx::gfx::shader::texture_parameter::properties(obs_properties_t* prop
 	if (field_type() == texture_field_type::Enum) {
 		auto p = obs_properties_add_list(props, get_key().data(), has_name() ? get_name().data() : get_key().data(), OBS_COMBO_TYPE_LIST, OBS_COMBO_FORMAT_STRING);
 		for (auto v : _values) {
-			obs_property_list_add_string(p, v.name.c_str(), v.data.file.generic_u8string().c_str());
+			obs_property_list_add_string(p, v.name.c_str(), reinterpret_cast<const char*>(v.data.file.generic_u8string().c_str()));
 		}
 	} else {
 		obs_properties_t* pr = obs_properties_create();
@@ -268,7 +268,7 @@ void streamfx::gfx::shader::texture_parameter::assign()
 
 			if (((field_type() == texture_field_type::Input) && (_type == texture_type::File)) || (field_type() == texture_field_type::Enum)) {
 				if (!_file_path.empty()) {
-					_file_texture = std::make_shared<streamfx::obs::gs::texture>(streamfx::util::platform::native_to_utf8(_file_path).generic_u8string().c_str());
+					_file_texture = std::make_shared<streamfx::obs::gs::texture>(_file_path.string());
 				}
 			} else if ((field_type() == texture_field_type::Input) && (_type == texture_type::Source)) {
 				// Try and grab the source itself.
@@ -291,7 +291,7 @@ void streamfx::gfx::shader::texture_parameter::assign()
 				}
 
 				// Create the necessary render target to capture the source.
-				auto rt = std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA, GS_ZS_NONE);
+				auto rt = std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA, GS_ZS_NONE);
 
 				// Propagate all of this into the storage.
 				_source_rendertarget = rt;

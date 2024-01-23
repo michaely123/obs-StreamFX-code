@@ -35,7 +35,7 @@ static constexpr std::string_view HELP_URL = "https://github.com/Xaymar/obs-Stre
 shader_instance::shader_instance(obs_data_t* data, obs_source_t* self) : obs::source_instance(data, self)
 {
 	_fx = std::make_shared<streamfx::gfx::shader::shader>(self, streamfx::gfx::shader::shader_mode::Filter);
-	_rt = std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA, GS_ZS_NONE);
+	_rt = std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA, GS_ZS_NONE);
 
 	update(data);
 }

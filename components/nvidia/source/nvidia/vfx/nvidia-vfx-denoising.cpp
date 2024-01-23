@@ -111,7 +111,7 @@ std::shared_ptr<::streamfx::obs::gs::texture> streamfx::nvidia::vfx::denoising::
 #endif
 
 	// Resize if the size or scale was changed.
-	resize(in->get_width(), in->get_height());
+	resize(in->width(), in->height());
 
 	// Reload effect if dirty.
 	if (_dirty) {

@@ -82,22 +82,12 @@ denoising_instance::denoising_instance(obs_data_t* data, obs_source_t* self)
 		::streamfx::obs::gs::context gctx;
 
 		// Create the render target for the input buffering.
-		_input = std::make_shared<::streamfx::obs::gs::rendertarget>(GS_RGBA_UNORM, GS_ZS_NONE);
+		_input = std::make_shared<::streamfx::obs::gs::texrender>(GS_RGBA_UNORM, GS_ZS_NONE);
 		_input->render(1, 1); // Preallocate the RT on the driver and GPU.
 		_output = _input->get_texture();
 
 		// Load the required effect.
 		_standard_effect = std::make_shared<::streamfx::obs::gs::effect>(::streamfx::data_file_path("effects/standard.effect"));
-
-		// Create Samplers
-		_channel0_sampler = std::make_shared<::streamfx::obs::gs::sampler>();
-		_channel0_sampler->set_filter(gs_sample_filter::GS_FILTER_LINEAR);
-		_channel0_sampler->set_address_mode_u(GS_ADDRESS_CLAMP);
-		_channel0_sampler->set_address_mode_v(GS_ADDRESS_CLAMP);
-		_channel1_sampler = std::make_shared<::streamfx::obs::gs::sampler>();
-		_channel1_sampler->set_filter(gs_sample_filter::GS_FILTER_LINEAR);
-		_channel1_sampler->set_address_mode_u(GS_ADDRESS_CLAMP);
-		_channel1_sampler->set_address_mode_v(GS_ADDRESS_CLAMP);
 	}
 
 	if (data) {

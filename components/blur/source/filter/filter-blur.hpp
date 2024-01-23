@@ -9,7 +9,7 @@
 #include "gfx/gfx-util.hpp"
 #include "obs/gs/gs-effect.hpp"
 #include "obs/gs/gs-helper.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 #include "obs/gs/gs-texture.hpp"
 #include "obs/obs-source-factory.hpp"
 
@@ -33,13 +33,13 @@ namespace streamfx::filter::blur {
 		std::shared_ptr<streamfx::gfx::util> _gfx_util;
 
 		// Input
-		std::shared_ptr<streamfx::obs::gs::rendertarget> _source_rt;
+		std::shared_ptr<streamfx::obs::gs::texrender> _source_rt;
 		std::shared_ptr<streamfx::obs::gs::texture>      _source_texture;
 		bool                                             _source_rendered;
 
 		// Rendering
 		std::shared_ptr<streamfx::obs::gs::texture>      _output_texture;
-		std::shared_ptr<streamfx::obs::gs::rendertarget> _output_rt;
+		std::shared_ptr<streamfx::obs::gs::texrender> _output_rt;
 		bool                                             _output_rendered;
 
 		// Blur

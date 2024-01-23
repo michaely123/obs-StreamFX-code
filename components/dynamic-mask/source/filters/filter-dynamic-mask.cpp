@@ -315,8 +315,8 @@ void dynamic_mask_instance::video_render(gs_effect_t* in_effect)
 		streamfx::obs::gs::debug_marker gdm{streamfx::obs::gs::debug_color_cache, "Base Texture"};
 #endif
 		// Ensure the Render Target matches the expected format.
-		if (!_base_rt || (_base_rt->get_color_format() != _base_color_format)) {
-			_base_rt = std::make_shared<streamfx::obs::gs::rendertarget>(_base_color_format, GS_ZS_NONE);
+		if (!_base_rt || (_base_rt->color_format() != _base_color_format)) {
+			_base_rt = std::make_shared<streamfx::obs::gs::texrender>(_base_color_format, GS_ZS_NONE);
 		}
 
 		bool previous_srgb  = gs_framebuffer_srgb_enabled();
@@ -400,8 +400,8 @@ void dynamic_mask_instance::video_render(gs_effect_t* in_effect)
 			streamfx::obs::gs::debug_marker gdm{streamfx::obs::gs::debug_color_source, "Input '%s'", input.name().data()};
 #endif
 			// Ensure the Render Target matches the expected format.
-			if (!_input_rt || (_input_rt->get_color_format() != _input_color_format)) {
-				_input_rt = std::make_shared<streamfx::obs::gs::rendertarget>(_input_color_format, GS_ZS_NONE);
+			if (!_input_rt || (_input_rt->color_format() != _input_color_format)) {
+				_input_rt = std::make_shared<streamfx::obs::gs::texrender>(_input_color_format, GS_ZS_NONE);
 			}
 
 			auto previous_lsrgb = gs_get_linear_srgb();
@@ -474,8 +474,8 @@ void dynamic_mask_instance::video_render(gs_effect_t* in_effect)
 #endif
 
 		// Ensure the Render Target matches the expected format.
-		if (!_final_rt || (_final_rt->get_color_format() != _base_color_format)) {
-			_final_rt = std::make_shared<streamfx::obs::gs::rendertarget>(_base_color_format, GS_ZS_NONE);
+		if (!_final_rt || (_final_rt->color_format() != _base_color_format)) {
+			_final_rt = std::make_shared<streamfx::obs::gs::texrender>(_base_color_format, GS_ZS_NONE);
 		}
 
 		bool previous_srgb  = gs_framebuffer_srgb_enabled();
@@ -594,9 +594,9 @@ void dynamic_mask_instance::video_render(gs_effect_t* in_effect)
 			return;
 		} else {
 			if (gs_get_linear_srgb()) {
-				gs_effect_set_texture_srgb(param, _final_tex->get_object());
+				gs_effect_set_texture_srgb(param, *_final_tex);
 			} else {
-				gs_effect_set_texture(param, _final_tex->get_object());
+				gs_effect_set_texture(param, *_final_tex);
 			}
 		}
 		while (gs_effect_loop(final_effect, "Draw")) {

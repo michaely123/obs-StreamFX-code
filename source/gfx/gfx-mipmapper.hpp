@@ -6,7 +6,7 @@
 #include "common.hpp"
 #include "gfx/gfx-util.hpp"
 #include "obs/gs/gs-effect.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 #include "obs/gs/gs-texture.hpp"
 #include "obs/gs/gs-vertexbuffer.hpp"
 
@@ -23,10 +23,16 @@
  */
 
 namespace streamfx::gfx {
+	enum class mip_generator : uint8_t {
+		LINEAR,
+		MAGIC_KERNEL_2011,
+		MAGIC_KERNEL_SHARP_PLUS_2021,
+
+	};
+
 	class mipmapper {
-		std::unique_ptr<streamfx::obs::gs::rendertarget> _rt;
-		streamfx::obs::gs::effect                        _effect;
-		std::shared_ptr<streamfx::gfx::util>             _gfx_util;
+		streamfx::obs::gs::effect            _effect;
+		std::shared_ptr<streamfx::gfx::util> _gfx_util;
 
 		public:
 		~mipmapper();
@@ -34,6 +40,6 @@ namespace streamfx::gfx {
 
 		uint32_t calculate_max_mip_level(uint32_t width, uint32_t height);
 
-		void rebuild(std::shared_ptr<streamfx::obs::gs::texture> source, std::shared_ptr<streamfx::obs::gs::texture> target);
+		void rebuild(std::shared_ptr<streamfx::obs::gs::texture> source, std::shared_ptr<streamfx::obs::gs::texture> target, mip_generator generator = mip_generator::LINEAR);
 	};
 } // namespace streamfx::gfx

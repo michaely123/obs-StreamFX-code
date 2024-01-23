@@ -31,7 +31,7 @@ streamfx::gfx::source_texture::source_texture(streamfx::obs::source child, strea
 		throw std::runtime_error("Child contains Parent");
 	}
 
-	_rt = std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA, GS_ZS_NONE);
+	_rt = std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA, GS_ZS_NONE);
 }
 
 obs_source_t* streamfx::gfx::source_texture::get_object()

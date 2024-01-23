@@ -5,7 +5,7 @@
 #pragma once
 #include "common.hpp"
 #include "gfx/gfx-source-texture.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 #include "obs/gs/gs-sampler.hpp"
 #include "obs/obs-signal-handler.hpp"
 #include "obs/obs-source-active-child.hpp"

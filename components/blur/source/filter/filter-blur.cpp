@@ -127,8 +127,8 @@ blur_instance::blur_instance(obs_data_t* settings, obs_source_t* self) : obs::so
 		auto gctx = streamfx::obs::gs::context();
 
 		// Create RenderTargets
-		this->_source_rt = std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA, GS_ZS_NONE);
-		this->_output_rt = std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA, GS_ZS_NONE);
+		this->_source_rt = std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA, GS_ZS_NONE);
+		this->_output_rt = std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA, GS_ZS_NONE);
 
 		// Load Effects
 		{
@@ -561,10 +561,10 @@ void blur_instance::video_render(gs_effect_t* effect)
 			obs_source_skip_video_filter(_self);
 			return;
 		} else {
-			gs_effect_set_texture(param, _output_texture->get_object());
+			gs_effect_set_texture(param, *_output_texture);
 		}
 		while (gs_effect_loop(finalEffect, technique)) {
-			gs_draw_sprite(_output_texture->get_object(), 0, baseW, baseH);
+			gs_draw_sprite(*_output_texture, 0, baseW, baseH);
 		}
 	}
 }
@@ -612,7 +612,7 @@ void blur_factory::get_defaults2(obs_data_t* settings)
 	obs_data_set_default_double(settings, ST_KEY_MASK_REGION_FEATHER, 0.0);
 	obs_data_set_default_double(settings, ST_KEY_MASK_REGION_FEATHER_SHIFT, 0.0);
 	obs_data_set_default_bool(settings, ST_KEY_MASK_REGION_INVERT, false);
-	obs_data_set_default_string(settings, ST_KEY_MASK_IMAGE, streamfx::data_file_path("white.png").u8string().c_str());
+	obs_data_set_default_string(settings, ST_KEY_MASK_IMAGE, reinterpret_cast<const char*>(streamfx::data_file_path("white.png").generic_u8string().c_str()));
 	obs_data_set_default_string(settings, ST_KEY_MASK_SOURCE, "");
 	obs_data_set_default_int(settings, ST_KEY_MASK_COLOR, 0xFFFFFFFFull);
 	obs_data_set_default_double(settings, ST_KEY_MASK_MULTIPLIER, 1.0);

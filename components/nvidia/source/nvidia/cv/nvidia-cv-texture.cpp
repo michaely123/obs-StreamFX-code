@@ -46,7 +46,7 @@ texture::texture(uint32_t width, uint32_t height, gs_color_format pix_fmt)
 	auto cctx = ::streamfx::nvidia::cuda::obs::get()->get_context()->enter();
 
 	// Allocate a new Texture
-	_texture = std::make_shared<::streamfx::obs::gs::texture>(width, height, pix_fmt, 1, nullptr, ::streamfx::obs::gs::texture::flags::None);
+	_texture = std::make_shared<::streamfx::obs::gs::texture>(width, height, pix_fmt, 1, nullptr, ::streamfx::obs::gs::texture_flags::None);
 	alloc();
 }
 
@@ -59,7 +59,7 @@ void texture::resize(uint32_t width, uint32_t height)
 
 	// Allocate a new Texture
 	free();
-	_texture = std::make_shared<::streamfx::obs::gs::texture>(width, height, _texture->get_color_format(), 1, nullptr, ::streamfx::obs::gs::texture::flags::None);
+	_texture = std::make_shared<::streamfx::obs::gs::texture>(width, height, _texture->color_format(), 1, nullptr, ::streamfx::obs::gs::texture_flags::None);
 	alloc();
 }
 

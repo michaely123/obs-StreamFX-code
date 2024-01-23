@@ -77,7 +77,7 @@ std::string streamfx::filter::virtual_greenscreen::string(virtual_greenscreen_pr
 virtual_greenscreen_instance::virtual_greenscreen_instance(obs_data_t* data, obs_source_t* self)
 	: obs::source_instance(data, self),
 
-	  _size(1, 1), _provider(virtual_greenscreen_provider::INVALID), _provider_ui(virtual_greenscreen_provider::INVALID), _provider_ready(false), _provider_lock(), _provider_task(), _effect(), _channel0_sampler(), _channel1_sampler(), _input(), _output_color(), _output_alpha(), _dirty(true)
+	  _size(1, 1), _provider(virtual_greenscreen_provider::INVALID), _provider_ui(virtual_greenscreen_provider::INVALID), _provider_ready(false), _provider_lock(), _provider_task(), _effect(), _input(), _output_color(), _output_alpha(), _dirty(true)
 {
 	D_LOG_DEBUG("Initializating... (Addr: 0x%" PRIuPTR ")", this);
 
@@ -85,7 +85,7 @@ virtual_greenscreen_instance::virtual_greenscreen_instance(obs_data_t* data, obs
 		::streamfx::obs::gs::context gctx;
 
 		// Create the render target for the input buffering.
-		_input = std::make_shared<::streamfx::obs::gs::rendertarget>(GS_RGBA_UNORM, GS_ZS_NONE);
+		_input = std::make_shared<::streamfx::obs::gs::texrender>(GS_RGBA_UNORM, GS_ZS_NONE);
 		_input->render(1, 1); // Preallocate the RT on the driver and GPU.
 		_output_color = _input->get_texture();
 		_output_alpha = _input->get_texture();
@@ -99,16 +99,6 @@ virtual_greenscreen_instance::virtual_greenscreen_instance(obs_data_t* data, obs
 				D_LOG_ERROR("Failed to load '%s'.", file.generic_u8string().c_str());
 			}
 		}
-
-		// Create Samplers
-		_channel0_sampler = std::make_shared<::streamfx::obs::gs::sampler>();
-		_channel0_sampler->set_filter(gs_sample_filter::GS_FILTER_LINEAR);
-		_channel0_sampler->set_address_mode_u(GS_ADDRESS_CLAMP);
-		_channel0_sampler->set_address_mode_v(GS_ADDRESS_CLAMP);
-		_channel1_sampler = std::make_shared<::streamfx::obs::gs::sampler>();
-		_channel1_sampler->set_filter(gs_sample_filter::GS_FILTER_LINEAR);
-		_channel1_sampler->set_address_mode_u(GS_ADDRESS_CLAMP);
-		_channel1_sampler->set_address_mode_v(GS_ADDRESS_CLAMP);
 	}
 
 	if (data) {

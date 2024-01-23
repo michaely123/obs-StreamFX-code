@@ -7,7 +7,7 @@
 #include "gfx-blur-base.hpp"
 #include "gfx/gfx-util.hpp"
 #include "obs/gs/gs-effect.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 #include "obs/gs/gs-texture.hpp"
 
 #include "warning-disable.hpp"
@@ -84,10 +84,10 @@ namespace streamfx::gfx {
 			double_t                                           _size;
 			std::pair<double_t, double_t>                      _step_scale;
 			std::shared_ptr<::streamfx::obs::gs::texture>      _input_texture;
-			std::shared_ptr<::streamfx::obs::gs::rendertarget> _rendertarget;
+			std::shared_ptr<::streamfx::obs::gs::texrender> _rendertarget;
 
 			private:
-			std::shared_ptr<::streamfx::obs::gs::rendertarget> _rendertarget2;
+			std::shared_ptr<::streamfx::obs::gs::texrender> _rendertarget2;
 
 			public:
 			gaussian_linear();

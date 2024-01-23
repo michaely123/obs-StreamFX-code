@@ -17,11 +17,8 @@ if(NOT FFmpeg_FOUND)
 else()
     target_link_libraries(${COMPONENT_TARGET}
         PUBLIC
-            ${FFMPEG_LIBRARIES}
-    )
-
-    target_include_directories(${COMPONENT_TARGET}
-        PUBLIC
-            ${FFMPEG_INCLUDE_DIRS}
+			FFmpeg::avutil
+			FFmpeg::avcodec
+			FFmpeg::swscale
     )
 endif()

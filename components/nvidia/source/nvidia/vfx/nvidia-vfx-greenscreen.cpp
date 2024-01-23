@@ -93,7 +93,7 @@ std::shared_ptr<streamfx::obs::gs::texture> streamfx::nvidia::vfx::greenscreen::
 #endif
 
 	// Resize if the size or scale was changed.
-	resize(in->get_width(), in->get_height());
+	resize(in->width(), in->height());
 
 	// Reload effect if dirty.
 	if (_dirty) {
@@ -104,12 +104,12 @@ std::shared_ptr<streamfx::obs::gs::texture> streamfx::nvidia::vfx::greenscreen::
 #if defined(ENABLE_PROFILING) && !defined(D_PLATFORM_MAC) && _DEBUG
 		::streamfx::obs::gs::debug_marker profiler1{::streamfx::obs::gs::debug_color_copy, "Copy In -> Input"};
 #endif
-		gs_copy_texture(_input->get_texture()->get_object(), in->get_object());
+		gs_copy_texture(*(_input->get_texture()), *in);
 	}
 
 	{ // Enqueue into buffer (back is newest).
 		auto el = _buffer.front();
-		gs_copy_texture(el->get_object(), in->get_object());
+		gs_copy_texture(*el, *in);
 		_buffer.push_back(el);
 		_buffer.pop_front();
 	}
@@ -171,11 +171,11 @@ void streamfx::nvidia::vfx::greenscreen::resize(uint32_t width, uint32_t height)
 		_tmp = std::make_shared<::streamfx::nvidia::cv::image>(width, height, ::streamfx::nvidia::cv::pixel_format::RGBA, ::streamfx::nvidia::cv::component_type::UINT8, ::streamfx::nvidia::cv::component_layout::PLANAR, ::streamfx::nvidia::cv::memory_location::GPU, 1);
 	}
 
-	if (!_input || (in_size.first != _input->get_texture()->get_width()) || (in_size.second != _input->get_texture()->get_height())) {
+	if (!_input || (in_size.first != _input->get_texture()->width()) || (in_size.second != _input->get_texture()->height())) {
 		{
 			_buffer.clear();
 			for (size_t idx = 0; idx < LATENCY_BUFFER; idx++) {
-				auto el = std::make_shared<::streamfx::obs::gs::texture>(width, height, GS_RGBA_UNORM, 1, nullptr, ::streamfx::obs::gs::texture::flags::None);
+				auto el = std::make_shared<::streamfx::obs::gs::texture>(width, height, GS_RGBA_UNORM, 1, nullptr, ::streamfx::obs::gs::texture_flags::None);
 				_buffer.push_back(el);
 			}
 		}
@@ -217,7 +217,7 @@ void streamfx::nvidia::vfx::greenscreen::resize(uint32_t width, uint32_t height)
 		_dirty = true;
 	}
 
-	if (!_output || (in_size.first != _output->get_texture()->get_width()) || (in_size.second != _output->get_texture()->get_height())) {
+	if (!_output || (in_size.first != _output->get_texture()->width()) || (in_size.second != _output->get_texture()->height())) {
 		if (_output) {
 			_output->resize(in_size.first, in_size.second);
 		} else {

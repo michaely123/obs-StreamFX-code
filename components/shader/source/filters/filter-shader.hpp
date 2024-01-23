@@ -6,13 +6,13 @@
 #pragma once
 #include "common.hpp"
 #include "gfx/shader/gfx-shader.hpp"
-#include "obs/gs/gs-rendertarget.hpp"
+#include "obs/gs/gs-texrender.hpp"
 #include "obs/obs-source-factory.hpp"
 
 namespace streamfx::filter::shader {
 	class shader_instance : public obs::source_instance {
 		std::shared_ptr<streamfx::gfx::shader::shader>   _fx;
-		std::shared_ptr<streamfx::obs::gs::rendertarget> _rt;
+		std::shared_ptr<streamfx::obs::gs::texrender> _rt;
 
 		public:
 		shader_instance(obs_data_t* data, obs_source_t* self);

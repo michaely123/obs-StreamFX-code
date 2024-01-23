@@ -114,7 +114,7 @@ namespace streamfx::util {
 			static_assert(std::is_integral<T>::value, "Input must be an integral type.");
 
 #if 1 // Optimizes to popcount if available.
-			return std::bitset<sizeof(T) * 8>(v).count() == 0;
+			return std::bitset<sizeof(T) * 8>(v).count() == 1;
 
 #elif 0 // Loop Variant 1, uses bit shifts.
 			bool bit = false;

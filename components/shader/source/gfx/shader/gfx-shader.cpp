@@ -44,7 +44,7 @@ streamfx::gfx::shader::shader::shader(obs_source_t* self, shader_mode mode)
 
 	  _have_current_params(false), _time(0), _time_loop(0), _loops(0), _random(), _random_seed(0),
 
-	  _rt_up_to_date(false), _rt(std::make_shared<streamfx::obs::gs::rendertarget>(GS_RGBA_UNORM, GS_ZS_NONE))
+	  _rt_up_to_date(false), _rt(std::make_shared<streamfx::obs::gs::texrender>(GS_RGBA_UNORM, GS_ZS_NONE))
 {
 	// Initialize random values.
 	_random.seed(static_cast<unsigned long long>(_random_seed));
@@ -188,13 +188,13 @@ void streamfx::gfx::shader::shader::properties(obs_properties_t* pr)
 		obs_properties_add_group(pr, ST_KEY_SHADER, D_TRANSLATE(ST_I18N_SHADER), OBS_GROUP_NORMAL, grp);
 
 		{
-			std::string path = "";
+			std::u8string path = u8"";
 			if (_shader_file.has_parent_path()) {
-				path = _shader_file.parent_path().string();
+				path = _shader_file.parent_path().generic_u8string();
 			} else {
-				path = streamfx::data_file_path("examples/").u8string();
+				path = streamfx::data_file_path("examples/").generic_u8string();
 			}
-			auto p = obs_properties_add_path(grp, ST_KEY_SHADER_FILE, D_TRANSLATE(ST_I18N_SHADER_FILE), OBS_PATH_FILE, "*.*", path.c_str());
+			auto p = obs_properties_add_path(grp, ST_KEY_SHADER_FILE, D_TRANSLATE(ST_I18N_SHADER_FILE), OBS_PATH_FILE, "*.*", reinterpret_cast<const char*>(path.c_str()));
 		}
 		{
 			auto p = obs_properties_add_list(grp, ST_KEY_SHADER_TECHNIQUE, D_TRANSLATE(ST_I18N_SHADER_TECHNIQUE), OBS_COMBO_TYPE_LIST, OBS_COMBO_FORMAT_STRING);
@@ -521,7 +521,7 @@ void streamfx::gfx::shader::shader::render(gs_effect* effect)
 		::streamfx::obs::gs::debug_marker profiler1{::streamfx::obs::gs::debug_color_render, "Draw Cache"};
 #endif
 
-		gs_effect_set_texture(gs_effect_get_param_by_name(effect, "image"), tex->get_object());
+		gs_effect_set_texture(gs_effect_get_param_by_name(effect, "image"), *tex);
 		while (gs_effect_loop(effect, "Draw")) {
 			gs_draw_sprite(nullptr, 0, width(), height());
 		}
